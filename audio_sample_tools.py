@@ -63,6 +63,12 @@ def find_key(sample):
         sample['key'] = results.group(0)    # (0): pattern uses matching so result groups must be joined
 
 
+def determine_if_loop(sample):
+    if 'key' or 'bpm' in sample:
+        sample['loop'] = 'True'
+    else:
+        sample['loop'] = 'False'
+
 def main():
     sample_info = parse_directory(ROOT)
     for sample in sample_info:
