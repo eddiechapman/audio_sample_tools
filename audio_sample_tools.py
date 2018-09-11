@@ -46,11 +46,8 @@ def find_bpm(sample):
     possible_bpm_locations = sample['file'] + sample['sub_kit']
     results = pattern.search(possible_bpm_locations)
     if results:
-        sample['BPM'] = results.group().replace('BPM', '')
-        sample['loop'] = 'True'
-    else:
-        sample['loop'] = 'False'
-        sample['BPM'] = 'N/A'
+        sample['bpm'] = results.group().replace('BPM', '')
+
 
 def find_effect(sample):
     pass
@@ -76,6 +73,7 @@ def main():
         find_effect(sample)
         find_filter(sample)
         find_key(sample)
+        determine_if_loop(sample)
         print(json.dumps(sample, indent=1))
 
 main()
