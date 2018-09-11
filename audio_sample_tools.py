@@ -8,6 +8,7 @@
 
 import json
 import os.path
+import re
 
 
 ROOT = '/home/eddie/Music/Samples/JULEZ JADON DRUMS'
@@ -36,12 +37,20 @@ def categorize_sound(sample):
     sample['category'] = sample['filename_info'][0]
 
 
-def determine_if_loop(sample):
-    pass
+def find_name(sample):
+    sample['name'] = sample['filename_info'][1]
 
 
 def find_bpm(sample):
-    pass
+    pattern = re.compile(r'\d{2,3}\.?\d?BPM')
+    possible_bpm_locations = sample['file'] + sample['sub_kit']
+    results = pattern.search(possible_bpm_locations)
+    if results:
+        sample['BPM'] = results.group().replace('BPM', '')
+        sample['loop'] = 'True'
+    else:
+        sample['loop'] = 'False'
+        sample['BPM'] = 'N/A'
 
 def find_effect(sample):
     pass
@@ -57,8 +66,8 @@ def main():
     sample_info = parse_directory(ROOT)
     for sample in sample_info:
         extract_filename_info(sample)
+        find_name(sample)
         categorize_sound(sample)
-        determine_if_loop(sample)
         find_bpm(sample)
         find_effect(sample)
         find_filter(sample)
