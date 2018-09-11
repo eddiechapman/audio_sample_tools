@@ -6,7 +6,7 @@
 # filenames are maintained. Any filenames longer than 16 characters are exported
 # in a text file for future renaming.
 
-
+import json
 import os.path
 
 
@@ -33,7 +33,7 @@ def extract_filename_info(sample):
 
 
 def categorize_sound(sample):
-    pass
+    sample['category'] = sample['filename_info'][0]
 
 
 def determine_if_loop(sample):
@@ -63,7 +63,7 @@ def main():
         find_effect(sample)
         find_filter(sample)
         find_key(sample)
-        print(sample)
+        print(json.dumps(sample, indent=1))
 
 main()
 
