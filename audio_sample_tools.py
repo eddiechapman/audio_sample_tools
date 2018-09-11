@@ -59,7 +59,11 @@ def find_filter(sample):
     pass
 
 def find_key(sample):
-    pass
+    pattern = re.compile(r'([A-G])#?(maj|min)')
+    possible_key_locations = sample['file'] + sample['sub_kit']
+    results = pattern.search(possible_key_locations)
+    if results:
+        sample['key'] = results.group(0)    # (0): pattern uses matching so result groups must be joined
 
 
 def main():
