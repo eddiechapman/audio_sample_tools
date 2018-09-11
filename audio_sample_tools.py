@@ -7,7 +7,7 @@
 # in a text file for future renaming.
 
 import json
-import os.path
+import os
 import re
 
 
@@ -20,8 +20,8 @@ def parse_directory(ROOT):
             if file.endswith('.wav'):
                 sample = {
                     'file': file,
-                    'filename': file.split('.')[0],
-                    'filetype': file.split('.')[1],
+                    'filename': os.path.splitext(file)[0],
+                    'filetype': os.path.splitext(file)[1], # this is not good for BPMs (85.5BPM)
                     'kit': directory.split('/')[-2],
                     'sub_kit': directory.split('/')[-1]
                 }
