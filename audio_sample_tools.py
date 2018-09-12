@@ -6,6 +6,7 @@
 # filenames are maintained. Any filenames longer than 16 characters are exported
 # in a text file for future renaming.
 
+import csv
 import json
 import os
 import re
@@ -106,6 +107,17 @@ def determine_if_loop(sample):
     else:
         sample['loop'] = 'False'
 
+
+def write_csv(sample_info):
+    with open('sample_info.csv', 'w') as csv_file:
+        #column_names = sample_info[0].keys()
+        column_names = ['file', 'directory', 'filename', 'filetype', 'kit', 'sub_kit', 'filename_info', 'name', 'parent', 'varient', 'category', 'bpm', 'key', 'loop']
+        print(column_names)
+        writer = csv.DictWriter(csv_file, fieldnames=column_names)
+        writer.writeheader()
+        writer.writerows(sample_info)
+
+
 def main():
     sample_info = parse_directory(ROOT)
     for sample in sample_info:
@@ -124,6 +136,7 @@ def main():
         find_808_key(sample)
         determine_if_loop(sample)
         print(json.dumps(sample, indent=1))
+    write_csv(sample_info)
 
 main()
 
