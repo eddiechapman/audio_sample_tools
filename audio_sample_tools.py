@@ -35,7 +35,7 @@ def seperate_kit_sub_kit(sample):
 
 
 def seperate_filename_extension(sample):
-    """Save the name and extension of the file seperately"""
+    """Save the name and extension of the file separately"""
     sample['filename'] = os.path.splitext(sample['file'])[0]
     sample['filetype'] = os.path.splitext(sample['file'])[1]
 
@@ -46,7 +46,7 @@ def filename_spaces_to_underscores(sample):
 
 
 def extract_filename_info(sample):
-    """List components of filename that are seperated by an underscore"""
+    """List components of filename that are separated by an underscore"""
     sample['filename_info'] = sample['filename'].split('_')
 
 
@@ -70,8 +70,8 @@ def find_varient(sample):
 
 def find_parent(sample):
     """Save the sample name minus the variation number"""
-    if 'varient' in sample:
-        sample['parent'] = sample['name'].replace(sample['varient'], '')
+    if 'variant' in sample:
+        sample['parent'] = sample['name'].replace(sample['variant'], '')
 
 
 def find_bpm(sample):
@@ -125,7 +125,7 @@ def write_csv(sample_info):
     """Output the contents to a CSV file"""
     with open('sample_info.csv', 'w') as csv_file:
         #column_names = sample_info[0].keys()
-        column_names = ['file', 'directory', 'filename', 'filetype', 'kit', 'sub_kit', 'filename_info', 'name', 'parent', 'varient', 'category', 'bpm', 'key', 'loop']
+        column_names = ['file', 'directory', 'filename', 'filetype', 'kit', 'sub_kit', 'filename_info', 'name', 'parent', 'variant', 'category', 'bpm', 'key', 'loop']
         print(column_names)
         writer = csv.DictWriter(csv_file, fieldnames=column_names)
         writer.writeheader()
