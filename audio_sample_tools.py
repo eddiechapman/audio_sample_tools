@@ -15,6 +15,7 @@ import re
 ROOT = '/home/eddie/Music/Samples/JULEZ JADON DRUMS'
 
 def parse_directory(ROOT):
+    """Store the name and location of all wav files in a folder of folders"""
     sample_info = []
     for directory, sub_directories, files in os.walk(ROOT):
         for file in files:
@@ -28,32 +29,39 @@ def parse_directory(ROOT):
 
 
 def seperate_kit_sub_kit(sample):
+    """Save the name of the folder and subfolder the sample was found in"""
     sample['kit'] = sample['directory'].split('/')[-2]
     sample['sub_kit'] = sample['directory'].split('/')[-1]
 
 
 def seperate_filename_extension(sample):
+    """Save the name and extension of the file seperately"""
     sample['filename'] = os.path.splitext(sample['file'])[0]
     sample['filetype'] = os.path.splitext(sample['file'])[1]
 
 
 def filename_spaces_to_underscores(sample):
+    """Replace any spaces in filename with underscores"""
     sample['filename'] = sample['filename'].replace(' ', '_')
 
 
 def extract_filename_info(sample):
+    """List components of filename that are seperated by an underscore"""
     sample['filename_info'] = sample['filename'].split('_')
 
 
 def categorize_sound(sample):
+    """Save the sample category using the first filename component"""
     sample['category'] = sample['filename_info'][0]
 
 
 def find_name(sample):
+    """Save the description of the sample using the second filename component"""
     sample['name'] = sample['filename_info'][1]
 
 
 def find_varient(sample):
+    """Save the number at the end of the sample name as the variation number"""
     pattern = re.compile(r'\d$')
     results = pattern.search(sample['filename_info'][1])
     if results:
@@ -61,11 +69,13 @@ def find_varient(sample):
 
 
 def find_parent(sample):
+    """Save the sample name minus the variation number"""
     if 'varient' in sample:
         sample['parent'] = sample['name'].replace(sample['varient'], '')
 
 
 def find_bpm(sample):
+    """Find and store the beats per minute value"""
     pattern = re.compile(r'\d{2,3}\.?\d?BPM')
     possible_bpm_locations = sample['file'] + sample['sub_kit']
     results = pattern.search(possible_bpm_locations)
@@ -84,6 +94,7 @@ def find_filter(sample):
 
 
 def find_key(sample):
+    """Find and store the key or pitch of the sample"""
     pattern = re.compile(r'([A-G])#?(maj|min)')
     possible_key_locations = sample['file'] + sample['sub_kit']
     results = pattern.search(possible_key_locations)
@@ -94,6 +105,7 @@ def find_key(sample):
 
 
 def find_808_key(sample):
+    """Find the key or pitch for 808 files"""
     if sample['category'] == '808':
         pattern = re.compile(r'([A - G])  # ?\d?$')
         results = pattern.search(sample['file'])
@@ -102,6 +114,7 @@ def find_808_key(sample):
 
 
 def determine_if_loop(sample):
+    """Mark non-key, non-BPM samples as non-loops"""
     if sample['key'] != 'N/A' or sample['bpm'] != 'N/A':
         sample['loop'] = 'True'
     else:
@@ -109,6 +122,7 @@ def determine_if_loop(sample):
 
 
 def write_csv(sample_info):
+    """Output the contents to a CSV file"""
     with open('sample_info.csv', 'w') as csv_file:
         #column_names = sample_info[0].keys()
         column_names = ['file', 'directory', 'filename', 'filetype', 'kit', 'sub_kit', 'filename_info', 'name', 'parent', 'varient', 'category', 'bpm', 'key', 'loop']
