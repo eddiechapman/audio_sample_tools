@@ -68,6 +68,12 @@ def find_key(sample):
     else:
         sample['key'] = 'N/A'
 
+def find_808_key(sample):
+    if sample['category'] == '808':
+        pattern = re.compile(r'([A - G])  # ?\d?$')
+        results = pattern.search(sample['file'])
+        if results:
+            sample['key'] = results.group(0)
 
 def determine_if_loop(sample):
     if sample['key'] is not 'N/A':
