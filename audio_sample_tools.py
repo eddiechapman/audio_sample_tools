@@ -52,6 +52,18 @@ def find_name(sample):
     sample['name'] = sample['filename_info'][1]
 
 
+def find_varient(sample):
+    pattern = re.compile(r'\d$')
+    results = pattern.search(sample['filename_info'][1])
+    if results:
+        sample['varient'] = results.group()
+
+
+def find_parent(sample):
+    if 'varient' in sample:
+        sample['parent'] = sample['name'].replace(sample['varient'], '')
+
+
 def find_bpm(sample):
     pattern = re.compile(r'\d{2,3}\.?\d?BPM')
     possible_bpm_locations = sample['file'] + sample['sub_kit']
@@ -102,6 +114,8 @@ def main():
         filename_spaces_to_underscores(sample)
         extract_filename_info(sample)
         find_name(sample)
+        find_varient(sample)
+        find_parent(sample)
         categorize_sound(sample)
         find_bpm(sample)
         find_effect(sample)
