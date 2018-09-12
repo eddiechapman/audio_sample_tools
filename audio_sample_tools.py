@@ -20,13 +20,24 @@ def parse_directory(ROOT):
             if file.endswith('.wav'):
                 sample = {
                     'file': file,
-                    'filename': os.path.splitext(file)[0],
-                    'filetype': os.path.splitext(file)[1], # this is not good for BPMs (85.5BPM)
-                    'kit': directory.split('/')[-2],
-                    'sub_kit': directory.split('/')[-1]
+                    'directory': directory
                 }
                 sample_info.append(sample)
     return sample_info
+
+
+def seperate_kit_sub_kit(sample):
+    sample['kit'] = sample['directory'].split('/')[-2]
+    sample['sub_kit'] = sample['directory'].split('/')[-1]
+
+
+def seperate_filename_extension(sample):
+    sample['filename'] = os.path.splitext(sample['file'])[0]
+    sample['filetype'] = os.path.splitext(sample['file'])[1]
+
+
+def filename_spaces_to_underscores(sample):
+    sample['filename'] = sample['filename'].replace(' ', '_')
 
 
 def extract_filename_info(sample):
@@ -68,6 +79,7 @@ def find_key(sample):
     else:
         sample['key'] = 'N/A'
 
+
 def find_808_key(sample):
     if sample['category'] == '808':
         pattern = re.compile(r'([A - G])  # ?\d?$')
@@ -75,10 +87,9 @@ def find_808_key(sample):
         if results:
             sample['key'] = results.group(0)
 
+
 def determine_if_loop(sample):
-    if sample['key'] is not 'N/A':
-        sample['loop'] = 'True'
-    elif sample['bpm'] is not 'N/A':
+    if sample['key'] != 'N/A' or sample['bpm'] != 'N/A':
         sample['loop'] = 'True'
     else:
         sample['loop'] = 'False'
@@ -86,6 +97,9 @@ def determine_if_loop(sample):
 def main():
     sample_info = parse_directory(ROOT)
     for sample in sample_info:
+        seperate_filename_extension(sample)
+        seperate_kit_sub_kit(sample)
+        filename_spaces_to_underscores(sample)
         extract_filename_info(sample)
         find_name(sample)
         categorize_sound(sample)
