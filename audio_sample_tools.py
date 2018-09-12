@@ -54,8 +54,10 @@ def find_bpm(sample):
 def find_effect(sample):
     pass
 
+
 def find_filter(sample):
     pass
+
 
 def find_key(sample):
     pattern = re.compile(r'([A-G])#?(maj|min)')
