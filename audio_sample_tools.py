@@ -47,6 +47,8 @@ def find_bpm(sample):
     results = pattern.search(possible_bpm_locations)
     if results:
         sample['bpm'] = results.group().replace('BPM', '')
+    else:
+        sample['bpm'] = 'N/A'
 
 
 def find_effect(sample):
@@ -61,10 +63,14 @@ def find_key(sample):
     results = pattern.search(possible_key_locations)
     if results:
         sample['key'] = results.group(0)    # (0): pattern uses matching so result groups must be joined
+    else:
+        sample['key'] = 'N/A'
 
 
 def determine_if_loop(sample):
-    if 'key' or 'bpm' in sample:
+    if sample['key'] is not 'N/A':
+        sample['loop'] = 'True'
+    elif sample['bpm'] is not 'N/A':
         sample['loop'] = 'True'
     else:
         sample['loop'] = 'False'
@@ -79,6 +85,7 @@ def main():
         find_effect(sample)
         find_filter(sample)
         find_key(sample)
+        find_808_key(sample)
         determine_if_loop(sample)
         print(json.dumps(sample, indent=1))
 
