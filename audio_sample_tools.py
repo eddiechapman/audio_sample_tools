@@ -106,9 +106,9 @@ def find_key(sample):
 
 def find_808_key(sample):
     """Find the key or pitch for 808 files"""
-    if sample['category'] == '808':
-        pattern = re.compile(r'([A - G])  # ?\d?$')
-        results = pattern.search(sample['file'])
+    if sample['category'] == 808 or '808':
+        pattern = re.compile(r'([A-G])#?\d?$')
+        results = pattern.search(sample['filename_info'][-1])
         if results:
             sample['key'] = results.group(0)
 
