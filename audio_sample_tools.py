@@ -113,14 +113,6 @@ def find_808_key(sample):
             sample['key'] = results.group(0)
 
 
-def determine_if_loop(sample):
-    """Mark non-key, non-BPM samples as non-loops"""
-    if sample['key'] != 'N/A' or sample['bpm'] != 'N/A':
-        sample['loop'] = 'True'
-    else:
-        sample['loop'] = 'False'
-
-
 def write_csv(sample_info):
     """Output the contents to a CSV file"""
     with open('sample_info.csv', 'w') as csv_file:
@@ -148,7 +140,6 @@ def main():
         find_filter(sample)
         find_key(sample)
         find_808_key(sample)
-        determine_if_loop(sample)
         print(json.dumps(sample, indent=1))
     write_csv(sample_info)
 
