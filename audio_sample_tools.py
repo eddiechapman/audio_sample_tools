@@ -140,7 +140,7 @@ def main():
         filename_spaces_to_underscores(sample)
         extract_filename_info(sample)
         find_name(sample)
-        find_varient(sample)
+        find_variant(sample)
         find_parent(sample)
         categorize_sound(sample)
         find_bpm(sample)
