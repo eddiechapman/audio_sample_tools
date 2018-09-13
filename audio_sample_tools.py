@@ -60,12 +60,12 @@ def find_name(sample):
     sample['name'] = sample['filename_info'][1]
 
 
-def find_varient(sample):
+def find_variant(sample):
     """Save the number at the end of the sample name as the variation number"""
     pattern = re.compile(r'\d$')
     results = pattern.search(sample['filename_info'][1])
     if results:
-        sample['varient'] = results.group()
+        sample['variant'] = results.group()
 
 
 def find_parent(sample):
