@@ -93,7 +93,9 @@ def find_effect(sample):
         sample['effect'] = 'Dry'
 
 def find_filter(sample):
-    pass
+    """Determine if sample is a filter"""
+    if 'Filter' in sample['filename_info']:
+        sample['filter'] = 'Filter'
 
 
 def find_key(sample):
@@ -120,7 +122,10 @@ def write_csv(sample_info):
     """Output the contents to a CSV file"""
     with open('sample_info.csv', 'w') as csv_file:
         #column_names = sample_info[0].keys()
-        column_names = ['file', 'directory', 'filename', 'filetype', 'kit', 'sub_kit', 'filename_info', 'category', 'name', 'parent', 'variant', 'effect', 'bpm', 'key']
+        column_names = [
+            'file', 'directory', 'filename', 'filetype', 'kit',
+            'sub_kit', 'filename_info', 'category', 'name', 'parent',
+            'variant', 'effect', 'filter', 'bpm', 'key']
         print(column_names)
         writer = csv.DictWriter(csv_file, fieldnames=column_names)
         writer.writeheader()
