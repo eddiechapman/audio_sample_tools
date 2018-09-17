@@ -125,15 +125,33 @@ def write_csv(sample_info):
         column_names = [
             'file', 'directory', 'filename', 'filetype', 'kit',
             'sub_kit', 'filename_info', 'category', 'name', 'parent',
-            'variant', 'effect', 'filter', 'bpm', 'key']
+            'variant', 'effect', 'filter', 'bpm', 'key', 'category_abbreviation', 'folder']
         print(column_names)
         writer = csv.DictWriter(csv_file, fieldnames=column_names)
         writer.writeheader()
         writer.writerows(sample_info)
 
 
+def read_category_abbreviations():
+    """Open and store information about category abbreviations"""
+    with open('category_abbreviations.csv', 'r') as csv_file:
+        reader = csv.DictReader(csv_file, fieldnames=['category', 'abbreviation', 'folder'])
+        category_abbreviations = {}
+        for row in reader:
+            category_abbreviations[row['category']] = (row['abbreviation'], row['folder'])
+        return category_abbreviations
+
+
+def abbreviate_category(sample, category_abbreviations):
+    """Assign an abbreviated category label using the category field"""
+    if sample['category'] in category_abbreviations:
+        sample['category_abbreviation'] = category_abbreviations[sample['category']][0]
+        sample['folder'] = category_abbreviations[sample['category']][1]
+
+
 def main():
     sample_info = parse_directory(ROOT)
+    category_abbreviations = read_category_abbreviations()
     for sample in sample_info:
         seperate_filename_extension(sample)
         seperate_kit_sub_kit(sample)
@@ -148,6 +166,7 @@ def main():
         find_filter(sample)
         find_key(sample)
         find_808_key(sample)
+        abbreviate_category(sample, category_abbreviations)
         print(json.dumps(sample, indent=1))
     write_csv(sample_info)
 
